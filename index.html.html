@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year-End Performance Dashboard 2025 - Samynathan R</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f172a;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(14, 165, 233, 0.1) 0%, transparent 50%);
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 0;
+            box-shadow: 
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, 
+                #3b82f6 0%, 
+                #8b5cf6 25%, 
+                #ec4899 50%, 
+                #f59e0b 75%, 
+                #3b82f6 100%);
+            background-size: 200% 100%;
+            animation: gradient-slide 3s linear infinite;
+        }
+        
+        @keyframes gradient-slide {
+            0% { background-position: 0% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
+            color: white;
+            padding: 80px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 10px rgba(255, 255, 255, 0.25),
+                    0 0 20px rgba(147, 197, 253, 0.2),
+                    0 4px 20px rgba(0, 0, 0, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 15px rgba(255, 255, 255, 0.4),
+                    0 0 30px rgba(147, 197, 253, 0.3),
+                    0 0 40px rgba(96, 165, 250, 0.2),
+                    0 4px 20px rgba(0, 0, 0, 0.3);
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes subtitleGlow {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 8px rgba(255, 255, 255, 0.2),
+                    0 0 15px rgba(147, 197, 253, 0.15),
+                    0 2px 10px rgba(0, 0, 0, 0.2);
+                transform: scale(1);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 10px rgba(255, 255, 255, 0.3),
+                    0 0 20px rgba(147, 197, 253, 0.25),
+                    0 0 30px rgba(96, 165, 250, 0.15),
+                    0 2px 10px rgba(0, 0, 0, 0.2);
+                transform: scale(1.015);
+            }
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 1;
+            color: #ffffff;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+        
+        .header p {
+            font-size: 1.4em;
+            opacity: 0.98;
+            position: relative;
+            z-index: 1;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            animation: subtitleGlow 3s ease-in-out infinite;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 50px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            position: relative;
+        }
+        
+        .metrics::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 
+                0 10px 30px rgba(15, 23, 42, 0.08),
+                0 1px 2px rgba(15, 23, 42, 0.05);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.15), transparent);
+            transition: right 0.5s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 25px 50px rgba(59, 130, 246, 0.25),
+                0 0 0 1px rgba(59, 130, 246, 0.1);
+        }
+        
+        .metric-card:hover::after {
+            right: 100%;
+        }
+        
+        .metric-value {
+            font-size: 4em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 15px 0;
+            line-height: 1;
+            filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.2));
+        }
+        
+        .metric-label {
+            font-size: 0.85em;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+        
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            padding: 40px;
+        }
+        
+        .chart-container {
+            background: linear-gradient(145deg, #ffffff 0%, #f0f4ff 100%);
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 
+                0 20px 60px rgba(59, 130, 246, 0.15),
+                0 8px 20px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(59, 130, 246, 0.1);
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+        
+        .chart-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: right 0.5s ease;
+        }
+        
+        .chart-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 30px 80px rgba(59, 130, 246, 0.3),
+                0 15px 35px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .chart-container:hover::after {
+            right: 100%;
+        }
+        
+        .chart-container h2 {
+            color: #1e40af;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            padding-bottom: 18px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+        
+        .chart-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            border-radius: 2px;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+        
+        .services-list {
+            padding: 60px 50px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        }
+        
+        .services-list h2 {
+            color: #1e293b;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .service-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 28px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            border-left: 6px solid #0747A6;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(62, 146, 204, 0.1), transparent);
+            transition: right 0.5s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 10px 25px rgba(7, 71, 166, 0.2);
+            border-left-color: #3e92cc;
+        }
+        
+        .service-card:hover::after {
+            right: 100%;
+        }
+        
+        .service-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #0747A6;
+            margin-bottom: 8px;
+        }
+        
+        .service-count {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #28a745;
+            margin: 5px 0;
+        }
+        
+        .service-desc {
+            color: #666;
+            font-size: 0.95em;
+            margin-top: 8px;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #0a2463 0%, #0f4c75 100%);
+            color: white;
+            padding: 35px;
+            text-align: center;
+            border-top: 4px solid #3e92cc;
+        }
+        
+        .footer p {
+            margin: 8px 0;
+            font-size: 1.05em;
+            opacity: 0.95;
+        }
+        
+        .footer strong {
+            color: #7dd3fc;
+        }
+        
+        @media (max-width: 768px) {
+            .charts {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .metric-value {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Year-End Performance Dashboard 2025</h1>
+            <p>Samynathan R - Infrastructure Support Engineer</p>
+            <p>ISOPS Project Performance Analysis</p>
+        </div>
+        
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-label">Total Resolved Tickets</div>
+                <div class="metric-value">608</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Average MTTR</div>
+                <div class="metric-value">44.6<span style="font-size:0.4em">hrs</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tickets per Week</div>
+                <div class="metric-value">11.7</div>
+            </div>
+        </div>
+        
+        <div class="services-list">
+            <h2>🛠️ Top AWS Services & Tools</h2>
+            <div class="services-grid">
+
+                <div class="service-card">
+                    <div class="service-name">AMI</div>
+                    <div class="service-count">138 tickets</div>
+                    <div class="service-desc">Image validation & deployment</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-name">EC2</div>
+                    <div class="service-count">131 tickets</div>
+                    <div class="service-desc">Instance management</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-name">Splunk</div>
+                    <div class="service-count">115 tickets</div>
+                    <div class="service-desc">Logging & monitoring</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-name">IAM</div>
+                    <div class="service-count">78 tickets</div>
+                    <div class="service-desc">Security & access</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-name">S3</div>
+                    <div class="service-count">73 tickets</div>
+                    <div class="service-desc">Storage management</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-name">CloudFormation</div>
+                    <div class="service-count">56 tickets</div>
+                    <div class="service-desc">Infrastructure as Code</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-name">CloudWatch</div>
+                    <div class="service-count">50 tickets</div>
+                    <div class="service-desc">Monitoring & alerts</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-name">Lambda</div>
+                    <div class="service-count">35 tickets</div>
+                    <div class="service-desc">Serverless automation</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-name">GitLab</div>
+                    <div class="service-count">34 tickets</div>
+                    <div class="service-desc">CI/CD pipelines</div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="charts">
+            <div class="chart-container">
+                <h2>⚡ Action Types</h2>
+                <div class="chart-wrapper">
+                    <canvas id="actionsChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h2>☁️ AWS Services Distribution</h2>
+                <div class="chart-wrapper">
+                    <canvas id="servicesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Report Generated:</strong> December 04, 2025 at 04:49 PM</p>
+            <p><strong>Period:</strong> January 1 - December 31, 2025</p>
+            <p><strong>Data Source:</strong> Jira ISOPS Project</p>
+        </div>
+    </div>
+    
+    <script>
+        // Chart.js default settings
+        Chart.defaults.font.family = "'Inter', 'Segoe UI', sans-serif";
+        Chart.defaults.font.size = 14;
+        Chart.defaults.color = '#334155';
+        
+        // Priority Chart
+        new Chart(document.getElementById('priorityChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Medium', 'Low', 'Urgent', 'High'],
+                datasets: [{
+                    data: [352, 167, 46, 43],
+                    backgroundColor: [
+                        'rgba(234, 179, 8, 0.9)',    // Yellow - Medium
+                        'rgba(34, 197, 94, 0.9)',    // Green - Low
+                        'rgba(239, 68, 68, 0.9)',    // Red - Urgent
+                        'rgba(249, 115, 22, 0.9)'    // Orange - High
+                    ],
+                    borderWidth: 3,
+                    borderColor: '#fff',
+                    hoverBorderWidth: 4,
+                    hoverBorderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: { size: 13, weight: '600' },
+                            padding: 15,
+                            color: '#475569'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        padding: 16,
+                        titleFont: { size: 15, weight: 'bold' },
+                        bodyFont: { size: 14 },
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + ' tickets (' + [57.9, 27.5, 7.6, 7.1][context.dataIndex] + '%)';
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                }
+            }
+        });
+        
+        // Services Chart - Vibrant colors like screenshot
+        new Chart(document.getElementById('servicesChart'), {
+            type: 'bar',
+            data: {
+                labels: ['AMI', 'EC2', 'Splunk', 'IAM', 'S3', 'CloudFormation', 'CloudWatch', 'Lambda', 'GitLab'],
+                datasets: [{
+                    label: 'Number of Tickets',
+                    data: [138, 131, 115, 78, 73, 56, 50, 35, 34],
+                    backgroundColor: [
+                        'rgba(37, 99, 235, 0.9)',    // Blue
+                        'rgba(34, 197, 94, 0.9)',    // Green
+                        'rgba(234, 179, 8, 0.9)',    // Yellow
+                        'rgba(6, 182, 212, 0.9)',    // Cyan
+                        'rgba(168, 85, 247, 0.9)',   // Purple
+                        'rgba(249, 115, 22, 0.9)',   // Orange
+                        'rgba(239, 68, 68, 0.9)',    // Red
+                        'rgba(20, 184, 166, 0.9)',   // Teal
+                        'rgba(107, 114, 128, 0.9)'   // Gray
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 0,
+                    hoverBackgroundColor: [
+                        'rgba(37, 99, 235, 1)',
+                        'rgba(34, 197, 94, 1)',
+                        'rgba(234, 179, 8, 1)',
+                        'rgba(6, 182, 212, 1)',
+                        'rgba(168, 85, 247, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(239, 68, 68, 1)',
+                        'rgba(20, 184, 166, 1)',
+                        'rgba(107, 114, 128, 1)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        padding: 16,
+                        titleFont: { size: 15, weight: 'bold' },
+                        bodyFont: { size: 14 },
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' tickets (' + [22.7, 21.5, 18.9, 12.8, 12.0, 9.2, 8.2, 5.8, 5.6][context.dataIndex] + '%)';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { 
+                            color: 'rgba(148, 163, 184, 0.1)',
+                            lineWidth: 1
+                        },
+                        ticks: {
+                            font: { size: 13, weight: '600' },
+                            color: '#475569'
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { size: 13, weight: '600' },
+                            color: '#475569'
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                }
+            }
+        });
+        
+        // Actions Chart - Same vibrant blue
+        new Chart(document.getElementById('actionsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['AMI Validation', 'Delete/Remove', 'Monitor/Alert', 'Troubleshoot/Fix', 'Create/Deploy', 'Disk/Resource Alerts', 'Update/Modify', 'Migration/Transfer', 'Lambda/Functions', 'Access/Permissions', 'Redeploy/Rebuild', 'Investigation/Support', 'Stack Operations', 'Request/Need', 'Review/Investigate', 'Others'],
+                datasets: [{
+                    label: 'Number of Tickets',
+                    data: [115, 71, 62, 60, 58, 44, 41, 32, 24, 21, 9, 5, 4, 4, 3, 55],
+                    backgroundColor: 'rgba(37, 99, 235, 0.9)',
+                    borderWidth: 0,
+                    borderRadius: 0,
+                    hoverBackgroundColor: 'rgba(29, 78, 216, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        padding: 16,
+                        titleFont: { size: 15, weight: 'bold' },
+                        bodyFont: { size: 14 },
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.x + ' tickets (' + [18.9, 11.7, 10.2, 9.9, 9.5, 7.2, 6.7, 5.3, 3.9, 3.5, 1.5, 0.8, 0.7, 0.7, 0.5, 9.0][context.dataIndex] + '%)';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { 
+                            color: 'rgba(148, 163, 184, 0.1)',
+                            lineWidth: 1
+                        },
+                        ticks: {
+                            font: { size: 13, weight: '600' },
+                            color: '#475569'
+                        }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { size: 12, weight: '600' },
+                            color: '#475569'
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                }
+            }
+        });
+    </script>
+</body>
+</html>
